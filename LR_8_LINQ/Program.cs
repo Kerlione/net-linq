@@ -16,6 +16,7 @@ namespace LR_8_LINQ
             int input = 0;
             do
             {
+                Console.Clear();
                 Console.WriteLine("Current client count: " + clients.Count + " Contract count: " + contracts.Count);
                 PrintMenu();
                 input = int.Parse(Console.ReadLine());
@@ -43,11 +44,18 @@ namespace LR_8_LINQ
                             ShowLongTermContracts(clients, contracts);
                             break;
                         }
+                    case 5:
+                        {
+                            PrintOnJoin(clients, contracts);
+                            break;
+                        }
                     case 0:
                         {
                             break;
                         }
                 }
+                Console.WriteLine("Press enter to continue and clear screen");
+                Console.ReadLine();
             } while (input != 0);
             Console.WriteLine("Press any key to exit");
             Console.ReadLine();
@@ -76,9 +84,20 @@ namespace LR_8_LINQ
                 ContractNumber = contract.ContractNumber,
                 ContractTerm = contract.MonthTerms
             }).Where(entry => entry.ContractTerm > minTerm);
-
+            Console.WriteLine("Long term contract count -> " + result.Count());
             result.OrderBy(report => report.LastName).ToList().ForEach(entry => Console.WriteLine("Last Name: " + entry.LastName + ", Contract ID: " + entry.ContractNumber + ", For: " + entry.ContractTerm));
 
+        }
+
+        static void PrintOnJoin(List<Client> clients, List<Contract> contracts)
+        {
+            Console.WriteLine("############################# Inner join #############################");
+            var result = clients.Join(contracts, client => client.PersonalIdentifier, contract => contract.ClientId, (client, contract) => new
+            {
+                Client = client,
+                Contract = contract
+            });
+            result.ToList().ForEach(row => Console.WriteLine(row.Client.ShortString() + row.Contract.ToString()));
         }
 
         static void PrintMenu()
@@ -87,6 +106,7 @@ namespace LR_8_LINQ
             Console.WriteLine("2. Add client and contract");
             Console.WriteLine("3. Order by last name");
             Console.WriteLine("4. Print long term clients");
+            Console.WriteLine("5. Print inner join");
             Console.WriteLine("0. Exit");
             Console.Write("Enter choice: ");
         }

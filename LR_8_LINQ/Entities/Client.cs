@@ -65,6 +65,11 @@ namespace LR_8_LINQ.Entities
             return client;
         }
 
+        public string ShortString()
+        {
+            return String.Format("{0}, {1}, {2}, {3}, {4}, {5}\n", FirstName, LastName, PersonalIdentifier, Email, Address, PhoneNumber);
+        }
+
         public override string ToString()
         {
             return String.Format("Client:\nFirst Name:{0}\nLast Name:{1}\nID:{2}\nEmail:{3}\nAddress:{4}\nPhone Number:{5}\n" + GetContracts(), 
